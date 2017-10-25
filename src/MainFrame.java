@@ -10,6 +10,7 @@ public class MainFrame extends JFrame {
     private Random rnd=new Random(System.currentTimeMillis());
     private LoginFrame loginframe;
     private Container cp;
+    private Container cp2;
     private int Screenw=Toolkit.getDefaultToolkit().getScreenSize().width;
     private int Screenh=Toolkit.getDefaultToolkit().getScreenSize().height;
     private int width=500,height=500;
@@ -20,13 +21,18 @@ public class MainFrame extends JFrame {
     private JMenu jmA=new JMenu("About");
     private JMenuItem jmiexit=new JMenuItem("Exit");
     private JMenuItem jmiloto=new JMenuItem("樂透開獎");
+    private JMenuItem jmimath=new JMenuItem("亂數鍵盤");
     private JPanel jplloto=new JPanel(new GridLayout(1,6,3,3));
     private JPanel jplloto2=new JPanel(new GridLayout(1,2,3,3));
+    private JPanel jplmath=new JPanel(new GridLayout(4,3,3,3));
     private JInternalFrame jifloto=new JInternalFrame();
+    private JInternalFrame jifmath=new JInternalFrame();
     private JDesktopPane jdp=new JDesktopPane();
     private JLabel jlb[]=new JLabel[6];
     private JButton jbtnclose=new JButton("Close");
     private JButton jbtnregen=new JButton("Regen");
+    private JButton jbtnmath[]=new JButton[12];
+    private JLabel jlbmath=new JLabel();
     public MainFrame(LoginFrame log){
         loginframe=log;
         init();
@@ -47,6 +53,7 @@ public class MainFrame extends JFrame {
         jmb.add(jmA);
         jmF.add(jmiexit);
         jmG.add(jmiloto);
+        jmG.add(jmimath);
         this.setContentPane(jdp);
         cp=jifloto.getContentPane();
         cp.setLayout(new BorderLayout(5,5));
@@ -91,10 +98,30 @@ public class MainFrame extends JFrame {
                 loto();
             }
         });
+        cp2=jifmath.getContentPane();
+        cp2.setLayout(new BorderLayout(5,5));
+        cp.add(jplmath,BorderLayout.CENTER);
+        cp.add(jlbmath,BorderLayout.NORTH);
+//        math();
+        for(int i=0;i<10;i++){
+            jbtnmath[i]=new JButton();
+            jplmath.add(jbtnmath[i]);
+        }
+
+
+        jmimath.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jdp.add(jifmath);
+                jifmath.setBounds(10,10,300,300);
+                jifmath.setVisible(true);
+                jifloto.setVisible(false);
+
+            }
+        });
 
     }
     private void loto(){
-
         int data[]=new int[6];
         Boolean flag=true;
         int i=0;
@@ -115,4 +142,26 @@ public class MainFrame extends JFrame {
         }
 
     }
+    private void math(){
+        int i=0;
+        Boolean flag=true;
+        int data[]=new int[10];
+        while(i<10){
+            data[i]=rnd.nextInt(9);
+            flag=true;
+            int j=0;
+            while(j<i&&flag){
+                if(data[i]==data[j]){
+                    flag=false;
+                }
+                j++;
+            }
+            if(flag){
+                jbtnmath[i].setText(Integer.toString(data[i]));
+                i++;
+            }
+        }
+
+    }
+
 }
