@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 public class LoginFrame extends JFrame {
     private int Screenw= Toolkit.getDefaultToolkit().getScreenSize().width;
     private int Screenh= Toolkit.getDefaultToolkit().getScreenSize().height;
-    private int width=300,height=200;
+    private int width=300,height=150;
     private Container cp;
     private JPanel jpl=new JPanel(new GridLayout(3,2,3,3));
     private JButton jbtnexit=new JButton("Exit");
@@ -52,4 +52,8 @@ public class LoginFrame extends JFrame {
 
     }
 
+    public void reset() {
+        jtf.setText("");
+        jpf.setText("");
+    }
 }

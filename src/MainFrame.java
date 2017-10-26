@@ -30,9 +30,9 @@ public class MainFrame extends JFrame {
     private JDesktopPane jdp=new JDesktopPane();
     private JLabel jlb[]=new JLabel[6];
     private JButton jbtnclose=new JButton("Close");
-    private JButton jbtnregen=new JButton("Regen");
+    private JButton jbtnregen=new JButton("Generate");
     private JButton jbtnmath[]=new JButton[12];
-    private JLabel jlbmath=new JLabel();
+    private JTextField jtfmath=new JTextField();
     public MainFrame(LoginFrame log){
         loginframe=log;
         init();
@@ -43,6 +43,7 @@ public class MainFrame extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                loginframe.reset();
                 loginframe.setVisible(true);
             }
         });
@@ -59,31 +60,67 @@ public class MainFrame extends JFrame {
         cp.setLayout(new BorderLayout(5,5));
         cp.add(jplloto,BorderLayout.CENTER);
         cp.add(jplloto2,BorderLayout.SOUTH);
+        cp2=jifmath.getContentPane();
+        cp2.setLayout(new BorderLayout(5,5));
+        cp2.add(jplmath,BorderLayout.CENTER);
+        cp2.add(jtfmath,BorderLayout.NORTH);
+        jifloto.setBounds(10,10,300,150);
+        jifmath.setBounds(10,10,300,300);
+        jplloto2.add(jbtnclose);
+        jplloto2.add(jbtnregen);
+        jtfmath.setEditable(false);
         for(int i=0;i<6;i++){
             jlb[i]=new JLabel();
+            jlb[i].setOpaque(true);
+            jlb[i].setBackground(new Color(102, 189, 248));
             jplloto.add(jlb[i]);
         }
         loto();
-        jplloto2.add(jbtnclose);
-        jplloto2.add(jbtnregen);
         jmiexit.setAccelerator(KeyStroke.getKeyStroke('X',Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jmiloto.setAccelerator(KeyStroke.getKeyStroke('L',Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        jmimath.setAccelerator(KeyStroke.getKeyStroke('K',Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         jmiexit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loginframe.setVisible(true);
-                MainFrame.this.setVisible(false);
+                loginframe.reset();
+                dispose();
+
             }
         });
-
         jmiloto.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                jifmath.dispose();
                 jdp.add(jifloto);
-                jifloto.setBounds(10,10,300,300);
                 jifloto.setVisible(true);
                 loto();
 
+            }
+        });
+        for(int i=0;i<10;i++){
+            jbtnmath[i]=new JButton();
+            jplmath.add(jbtnmath[i]);
+            jbtnmath[i].addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JButton jbtn= (JButton) e.getSource();
+                    jtfmath.setText(jtfmath.getText()+jbtn.getText());
+                }
+            });
+        }
+        jbtnmath[10]=new JButton(".");
+        jbtnmath[11]=new JButton("clear");
+        jplmath.add(jbtnmath[10]);
+        jplmath.add(jbtnmath[11]);
+        math();
+        jmimath.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jifloto.dispose();
+                jdp.add(jifmath);
+                jifmath.setVisible(true);
+                math();
             }
         });
         jbtnclose.addActionListener(new ActionListener() {
@@ -98,28 +135,18 @@ public class MainFrame extends JFrame {
                 loto();
             }
         });
-        cp2=jifmath.getContentPane();
-        cp2.setLayout(new BorderLayout(5,5));
-        cp.add(jplmath,BorderLayout.CENTER);
-        cp.add(jlbmath,BorderLayout.NORTH);
-//        math();
-        for(int i=0;i<10;i++){
-            jbtnmath[i]=new JButton();
-            jplmath.add(jbtnmath[i]);
-        }
-
-
-        jmimath.addActionListener(new ActionListener() {
+        jbtnmath[10].addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                jdp.add(jifmath);
-                jifmath.setBounds(10,10,300,300);
-                jifmath.setVisible(true);
-                jifloto.setVisible(false);
-
+                jtfmath.setText(jtfmath.getText()+".");
             }
         });
-
+        jbtnmath[11].addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                jtfmath.setText("");
+            }
+        });
     }
     private void loto(){
         int data[]=new int[6];
@@ -140,14 +167,13 @@ public class MainFrame extends JFrame {
                 i++;
             }
         }
-
     }
     private void math(){
         int i=0;
         Boolean flag=true;
         int data[]=new int[10];
         while(i<10){
-            data[i]=rnd.nextInt(9);
+            data[i]=rnd.nextInt(10);
             flag=true;
             int j=0;
             while(j<i&&flag){
@@ -161,7 +187,5 @@ public class MainFrame extends JFrame {
                 i++;
             }
         }
-
     }
-
 }
